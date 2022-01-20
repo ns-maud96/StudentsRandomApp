@@ -1,23 +1,16 @@
 package com.example.studentsrandomapp
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Toast
-import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
+import androidx.appcompat.app.AppCompatActivity
+import com.example.studentsrandomapp.databinding.AbsentListActivityBinding
 
-class AbsentListFragment : Fragment() {
+class AbsentListActivity : AppCompatActivity() {
 
     companion object {
-        const val REQUESTED_KEY = "requestedKey"
-        const val BUNDLE_KEY = "bundleKey"
-        const val TAG = "com.example.studentsRandomApp.AbsentListFragment"
-        fun newInstance() = AbsentListFragment()
+        const val EXTRA_KEY = "extraKey"
     }
 
     private var studentsList: ArrayList<String> = arrayListOf(
@@ -25,14 +18,10 @@ class AbsentListFragment : Fragment() {
         "Саша", "Настя", "Анна", "Марина", "Надежда", "Дарья", "Наташа", "Антон", "Дима"
     )
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.absent_list_fragment, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val binding = AbsentListActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         handleClick(R.id.check1)
         handleClick(R.id.check2)
@@ -48,23 +37,24 @@ class AbsentListFragment : Fragment() {
         handleClick(R.id.check12)
         handleClick(R.id.check13)
 
-        view.findViewById<Button>(R.id.confirmBtn).setOnClickListener {
+        binding.confirmBtn.setOnClickListener {
             studentsList.removeIf { obj: String? -> obj == "" }
             if (studentsList.isEmpty()) {
-                Toast.makeText(context, "Все отсутствуют", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Все отсутствуют", Toast.LENGTH_LONG).show()
             } else {
-                setFragmentResult(
-                    REQUESTED_KEY,
-                    bundleOf(BUNDLE_KEY to studentsList)
+                setResult(
+                    RESULT_OK, Intent().apply {
+                        putExtra(EXTRA_KEY, studentsList)
+                    }
                 )
             }
-            parentFragmentManager.popBackStack()
+            finish()
         }
     }
 
     private fun handleClick(idCheckBox: Int) {
-        view?.findViewById<CheckBox>(idCheckBox)?.setOnClickListener {
-            studentsList = changeStudentsList(view!!.findViewById(idCheckBox))
+        findViewById<CheckBox>(idCheckBox)?.setOnClickListener {
+            studentsList = changeStudentsList(findViewById(idCheckBox))
         }
     }
 
