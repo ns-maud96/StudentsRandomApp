@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/markAbsentText"
@@ -16,106 +17,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <LinearLayout
-        android:id="@+id/firstColumn"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/secondColumn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/markAbsentText">
-
-        <CheckBox
-            android:id="@+id/check1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ярослав" />
-
-        <CheckBox
-            android:id="@+id/check2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Егор" />
-
-        <CheckBox
-            android:id="@+id/check3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Стас" />
-
-        <CheckBox
-            android:id="@+id/check4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alex" />
-
-        <CheckBox
-            android:id="@+id/check5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Саша" />
-
-        <CheckBox
-            android:id="@+id/check6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Настя" />
-
-        <CheckBox
-            android:id="@+id/check7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Анна" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/secondColumn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/firstColumn"
-        app:layout_constraintTop_toBottomOf="@+id/markAbsentText">
-
-        <CheckBox
-            android:id="@+id/check8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Марина" />
-
-        <CheckBox
-            android:id="@+id/check9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Надежда" />
-
-        <CheckBox
-            android:id="@+id/check10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Дарья" />
-
-        <CheckBox
-            android:id="@+id/check11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Наташа" />
-
-        <CheckBox
-            android:id="@+id/check12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Антон" />
-
-        <CheckBox
-            android:id="@+id/check13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Дима" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/markAbsentText"
+        tools:itemCount="10"
+        />
 
     <Button
         android:id="@+id/confirmBtn"
@@ -125,6 +37,6 @@
         android:text="Подтвердить"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstColumn" />
+        app:layout_constraintTop_toBottomOf="@+id/recycler" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

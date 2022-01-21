@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class AbsentListFragment : Fragment() {
 
@@ -20,10 +22,8 @@ class AbsentListFragment : Fragment() {
         fun newInstance() = AbsentListFragment()
     }
 
-    private var studentsList: ArrayList<String> = arrayListOf(
-        "Ярослав", "Егор", "Стас", "Alex",
-        "Саша", "Настя", "Анна", "Марина", "Надежда", "Дарья", "Наташа", "Антон", "Дима"
-    )
+    var initialStudentList = StudentsList.studentsList.toMutableList() as ArrayList<String>
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,56 +34,52 @@ class AbsentListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        handleClick(R.id.check1)
-        handleClick(R.id.check2)
-        handleClick(R.id.check3)
-        handleClick(R.id.check4)
-        handleClick(R.id.check5)
-        handleClick(R.id.check6)
-        handleClick(R.id.check7)
-        handleClick(R.id.check8)
-        handleClick(R.id.check9)
-        handleClick(R.id.check10)
-        handleClick(R.id.check11)
-        handleClick(R.id.check12)
-        handleClick(R.id.check13)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler)
+        val adapter = RecyclerViewAdapter()
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
 
         view.findViewById<Button>(R.id.confirmBtn).setOnClickListener {
-            studentsList.removeIf { obj: String? -> obj == "" }
-            if (studentsList.isEmpty()) {
+            StudentsList.studentsList.removeIf { obj: String? -> obj == "" }
+            if (StudentsList.studentsList.isEmpty()) {
                 Toast.makeText(context, "Все отсутствуют", Toast.LENGTH_LONG).show()
             } else {
                 setFragmentResult(
                     REQUESTED_KEY,
-                    bundleOf(BUNDLE_KEY to studentsList)
+                    bundleOf(BUNDLE_KEY to StudentsList.studentsList)
                 )
             }
             parentFragmentManager.popBackStack()
+            StudentsList.studentsList = initialStudentList
+        }
+    }
+}
+
+class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.student_list_item, parent, false)
+        return RecyclerViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
+        val item = StudentsList.studentsList[position]
+        holder.checkBox.text = item
+
+
+        // PROBLEM HERE
+
+        holder.checkBox.setOnClickListener {
+            if (holder.checkBox.isChecked) {
+                StudentsList.studentsList[position] = ""
+            }
         }
     }
 
-    private fun handleClick(idCheckBox: Int) {
-        view?.findViewById<CheckBox>(idCheckBox)?.setOnClickListener {
-            studentsList = changeStudentsList(view!!.findViewById(idCheckBox))
-        }
-    }
+    override fun getItemCount(): Int = StudentsList.studentsList.size
+}
 
-    private fun changeStudentsList(view: CheckBox): ArrayList<String> {
-        when (view.id) {
-            R.id.check1 -> if (view.isChecked) studentsList[0] = ""
-            R.id.check2 -> if (view.isChecked) studentsList[1] = ""
-            R.id.check3 -> if (view.isChecked) studentsList[2] = ""
-            R.id.check4 -> if (view.isChecked) studentsList[3] = ""
-            R.id.check5 -> if (view.isChecked) studentsList[4] = ""
-            R.id.check6 -> if (view.isChecked) studentsList[5] = ""
-            R.id.check7 -> if (view.isChecked) studentsList[6] = ""
-            R.id.check8 -> if (view.isChecked) studentsList[7] = ""
-            R.id.check9 -> if (view.isChecked) studentsList[8] = ""
-            R.id.check10 -> if (view.isChecked) studentsList[9] = ""
-            R.id.check11 -> if (view.isChecked) studentsList[10] = ""
-            R.id.check12 -> if (view.isChecked) studentsList[11] = ""
-            R.id.check13 -> if (view.isChecked) studentsList[12] = ""
-        }
-        return studentsList
-    }
+class RecyclerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    var checkBox = view.findViewById<CheckBox>(R.id.checkBox)
 }
