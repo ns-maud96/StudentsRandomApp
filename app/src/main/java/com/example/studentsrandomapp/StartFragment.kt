@@ -26,19 +26,21 @@ class StartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setFragmentResultListener(AbsentListFragment.REQUESTED_KEY) { _, bundle ->
             val randomStudentList =
-                bundle.getStringArrayList(AbsentListFragment.BUNDLE_KEY) as ArrayList<String?>
+                bundle.get(AbsentListFragment.BUNDLE_KEY) as ArrayList<Student?>
             view.findViewById<Button>(R.id.selectBtn).setOnClickListener {
                 val student = randomStudentList.random()
-                view.findViewById<TextView>(R.id.student).text = student
+                view.findViewById<TextView>(R.id.student).text = student?.name.toString()
             }
-        }
 
-        view.findViewById<Button>(R.id.markAbsentBtn).setOnClickListener {
-            requireActivity().supportFragmentManager
-                .beginTransaction()
-                .addToBackStack(AbsentListFragment.TAG)
-                .replace(R.id.fragmentContainer, AbsentListFragment.newInstance())
-                .commit()
+
+            view.findViewById<Button>(R.id.markAbsentBtn).setOnClickListener {
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .addToBackStack(AbsentListFragment.TAG)
+                    .replace(R.id.fragmentContainer, AbsentListFragment.newInstance())
+                    .commit()
+            }
         }
     }
 }
+
